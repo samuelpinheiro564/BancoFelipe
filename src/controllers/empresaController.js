@@ -13,12 +13,22 @@ async function gelAllEmpresas(req, res) {
 
 async function CadastrarEmpresas(req, res) {
   const {cnpj, nome, cep, area_atuacao, email, senha } = req.body;
-  const query = 'INSERT INTO empresas (cnpj, nome, cep, area_atuacao, email, senha) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
-  const values = [cnpj, nome, cep, area_atuacao, email, senha];
+
+  const query = 'SELECT * FROM empresas WHERE cnpj = $1';
+  const checkCnpj = [cnpj];
 
   try {
-    const result = await pool.query(query, values);
-    res.status(201).json(result.rows[0]);
+    const cnpjExists = await pool.query(query,checkCnpj);
+
+    if (cnpjExists.rows.length > 0) {
+      return res.status(400).json({ message: 'CNPJ já cadastrado' });
+    }
+
+    const query = 'INSERT INTO empresas (cnpj, nome, cep, area_atuacao, email, senha) VALUES ($1, $2, $3, $4, $5, $6)';
+    const insertValues = [cnpj, nome, cep, area_atuacao, email, senha];
+  
+     await pool.query(query,insertValues);
+    res.status(201).json({message: 'Empresa cadastrada com sucesso'});
   } catch (err) {
     console.error('Erro ao cadastrar empresa:', err);
     res.status(500).json({ message: 'Erro ao cadastrar empresa', error: err.message });
@@ -50,6 +60,23 @@ async function VerificarSenha(req, res) {
       return res.status(200).json(result.rows);
     } else {
       return res.status(404).json({ message: 'Senha não encontrada para a empresa fornecida' });
+    }
+  } catch (err) {
+    console.error('Erro ao verificar a senha:', err);
+    res.status(500).json({ message: 'Erro ao verificar a senha', error: err.message });
+  }
+}
+
+async function obterCnpj(req, res) {
+  const { senha, nome } = req.params;
+  const query = 'SELECT cnpj FROM empresas WHERE senha = $1 AND nome = $2';
+  const values = [senha, nome];
+  try {
+    const result = await pool.query(query, values);
+    if (result.rows.length > 0) {
+      return res.status(200).json(result.rows);
+    } else {
+      return res.status(404).json({ message: 'cnpj não encontrado' });
     }
   } catch (err) {
     console.error('Erro ao verificar a senha:', err);
@@ -91,5 +118,6 @@ module.exports = {
   PesquisarEmpresa,
   VerificarSenha,
   AtualizarEmpresa,
-  DeletarEmpresa
+  DeletarEmpresa,
+  obterCnpj
 };

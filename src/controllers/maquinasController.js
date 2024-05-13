@@ -11,9 +11,10 @@ async function gelAllMaquinas(req, res) {
   }
 }
 
+
 async function CadastrarMaquinas(req, res) {
   const { modelo, marca, ano_fabricacao, funcao, potencia, horas_de_uso_diario, empresa_id } = req.body;
-  const query = 'INSERT INTO maquinas (modelo, marca, ano_fabricacao, funcao, potencia, horas_de_uso_diario, empresa_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+  const query = 'INSERT INTO maquinas (modelo, marca, ano_fabricacao, funcao, potencia, horas_de_uso_diario, empresa_id) VALUES ($1, $2, $3, $4, $5, $6, $7) ';
   const values = [modelo, marca, ano_fabricacao, funcao, potencia, horas_de_uso_diario, empresa_id];
   
   try {

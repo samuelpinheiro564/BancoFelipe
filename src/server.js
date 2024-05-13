@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Configuração do middleware CORS para permitir solicitações do localhost:8081
-app.use(cors({ origin: 'http://localhost:8081' }));
+app.use(cors({ origin: 'http://localhost:8082' }));
 
 // Habilita o uso de JSON no corpo das requisições
 app.use(express.json());

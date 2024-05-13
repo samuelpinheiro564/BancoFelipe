@@ -18,10 +18,10 @@ CREATE TABLE maquinas (
     id SERIAL PRIMARY KEY,
     modelo VARCHAR(255) NOT NULL,
     marca VARCHAR(255) NOT NULL,
-    ano_fabricacao INTEGER NOT NULL,
+    ano_fabricacao VARCHAR(255) NOT NULL,
     funcao VARCHAR(255) NOT NULL,
-    potencia INTEGER NOT NULL,
-    horas_de_uso_diario VARCHAR(2) NOT NULL,
+    potencia VARCHAR(255) NOT NULL,
+    horas_de_uso_diario VARCHAR(20) NOT NULL,
     empresa_id VARCHAR(14) NOT NULL,
     FOREIGN KEY (empresa_id) REFERENCES empresas(cnpj)
 );

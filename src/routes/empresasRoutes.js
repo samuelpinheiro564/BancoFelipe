@@ -5,6 +5,7 @@ const empresasController = require('../controllers/empresaController');
 router.get('/', empresasController.gelAllEmpresas);
 router.get('/nome/:nome', empresasController.PesquisarEmpresa);
 router.get('/senha/nome/:senha/:nome', empresasController.VerificarSenha);
+router.get('/id/:senha/:nome', empresasController.obterCnpj);
 router.post('/', empresasController.CadastrarEmpresas);
 router.put('/:cnpj', empresasController.AtualizarEmpresa);
 router.delete('/:cnpj', empresasController.DeletarEmpresa);
